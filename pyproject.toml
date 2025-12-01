@@ -1,4 +1,9 @@
 # pyproject.toml
+[tool.pip]
+index-url = "https://download.pytorch.org/whl/cu124"
+extra-index-url = "https://pypi.org/simple"
+
+
 [build-system]
 requires = ["setuptools>=61", "wheel", "torch @ https://download.pytorch.org/whl/cu124/torch-2.4.1%2Bcu124-cp311-cp311-win_amd64.whl", "numpy"]
 build-backend = "setuptools.build_meta"

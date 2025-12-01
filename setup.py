@@ -16,6 +16,20 @@ BUILD_NO_CUDA = os.getenv("BUILD_NO_CUDA", "0") == "1"
 WITH_SYMBOLS = os.getenv("WITH_SYMBOLS", "0") == "1"
 LINE_INFO = os.getenv("LINE_INFO", "0") == "1"
 
+# 根据平台生成合适的 torch 要求
+def get_torch_requirement():
+    # 检查是否在虚拟环境中
+    if hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
+        # 在虚拟环境中，使用宽松版本
+        return "torch>=2.0.0"
+    
+    # 根据平台返回合适的版本字符串
+    system = platform.system()
+    arch = platform.machine()
+    
+    # 你可以根据平台返回不同的要求
+    # 但通常建议使用宽松版本，让 pip 自动解决
+    return "torch>=2.0.0"
 
 def _ensure_cuda_env():
     # 如果已设置就别覆盖；但为了调试可打印出来
@@ -188,7 +202,7 @@ setup(
     install_requires=[
         "jaxtyping",
         "rich>=12",
-        "torch",
+        get_torch_requirement(),
         # 你原来这里写了 'typing_extensions;' 会解析出错，修正：
         'typing_extensions; python_version<"3.8"',
     ],
